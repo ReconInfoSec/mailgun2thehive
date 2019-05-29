@@ -34,6 +34,14 @@ def create_alert():
     # Configure artifacts
     artifacts = []
 
+    # Get attachments, if any
+    for key in request.files:
+        file = request.files[key]
+        logging.info(key)
+
+        file.save(key)
+        artifacts.append(AlertArtifact(dataType='file', tags=[key], data=key))
+
     # Tags list
     tags=['mailgun']
 
@@ -61,6 +69,10 @@ def create_alert():
     else:
         print('ko: {}/{}'.format(response.status_code, response.text))
         sys.exit(0)
+
+    # Delete attachments, if any
+    for key in request.files:
+        os.remove(key)
 
     # Return
     return "Hive Alert Created"
