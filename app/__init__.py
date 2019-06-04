@@ -21,6 +21,7 @@ def create_alert():
 
     # Get request data
     body = request.form.get('body-plain')
+    headers = request.form.get('message-headers')
     subject = request.form.get('subject')
     sender = request.form.get('sender')
     recipient = request.form.get('recipient')
@@ -51,7 +52,7 @@ def create_alert():
     alert = Alert(title="Mailgun - " + sender + " - " + subject,
                   tlp=2,
                   tags=tags,
-                  description=body,
+                  description="**Email body:**\n\n"+body+"\n\n**Message Headers:**\n\n"+headers,
                   type='external',
                   source='mailgun',
                   artifacts=artifacts,
